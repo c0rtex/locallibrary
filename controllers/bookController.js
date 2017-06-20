@@ -56,7 +56,6 @@ exports.book_detail = function(req, res, next) {
         }
     }, function(err, results) {
         if (err) return next(err);
-        console.log(results);
         res.render('book_detail', {title: 'Title', book: results.book, book_instances: results.book_instance});
     });
 };
