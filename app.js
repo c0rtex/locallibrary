@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
+var compression = require('compression');
+var helmet = require('helmet');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -12,8 +14,10 @@ var catalog = require('./routes/catalog');
 
 var app = express();
 
+app.use(helmet());
+
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb://localhost/local_library';
+var mongoDB = process.env.MONGODB_URI || 'mongodb://juancho:4brazam3@ds135252.mlab.com:35252/local_library';
 mongoose.connect(mongoDB);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -29,6 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 app.use(cookieParser());
+app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
